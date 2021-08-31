@@ -4,7 +4,8 @@ import argparse
 import os
 import sys
 
-from qwalk_worker import QTASKS, QWalkWorker
+from qwalk_utils import get_disk_usage, write_error_in_data
+from qwalk_worker import QTASKS, QWalkWorker, log_it
 
 
 def main() -> None:
@@ -27,6 +28,8 @@ def main() -> None:
         choices=list(QTASKS.keys()),
         required=True,
     )
+    parser.add_argument("--security_space",help="Security space in disk  in bytes",required=False,default=219902325555200)
+    parser.add_argument("--data_ticket",help="Data to be copied",required=False)
     parser.add_argument("--snap", help="Snapshot id")
 
     try:
@@ -37,6 +40,21 @@ def main() -> None:
         parser.print_help()
         print("-" * 80)
         sys.exit(0)
+    security_space = int(args.security_space)
+    other_args.append("--data_ticket")
+    other_args.append(args.data_ticket)
+    other_args.append("--security_space")
+    other_args.append(security_space)
+    other_args.append("--s")
+    other_args.append(args.s)
+    if 'qc208' in args.s:
+        total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
+        if free < security_space:
+            log_it("Security space has been reached")
+            write_error_in_data(args.data_ticket)
+
+
+
 
     QWalkWorker.run_all(
         args.s,

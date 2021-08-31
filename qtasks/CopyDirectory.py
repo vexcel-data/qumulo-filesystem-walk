@@ -9,6 +9,7 @@ from typing import Dict, Optional, Sequence
 
 from qumulo.rest_client import RestClient
 
+from qwalk_utils import get_disk_usage, write_error_in_data
 from . import FileInfo, Worker
 
 DEBUG = False
@@ -34,6 +35,10 @@ class CopyDirectory:
             help="will not preserve permissions or timestamps",
             action="store_true",
         )
+        parser.add_argument("--security_space", help="Security space in disk  in bytes", required=False,
+                            default=219902325555200)
+        parser.add_argument("--data_ticket", help="Data to be copied", required=False)
+        parser.add_argument("-s", help="Qumulo hostname", required=True)
         args = parser.parse_args(in_args)
         self.to_dir: Optional[str] = None
         self.skip_hardlinks: Optional[bool] = None
@@ -46,6 +51,9 @@ class CopyDirectory:
         if args.no_preserve:
             self.no_preserve = args.no_preserve
         self.folders: Dict[str, str] = {}
+        self.security_space = int(args.security_space)
+        self.data_ticket = args.data_ticket
+        self.cluster = args.s
 
     def create_folder(self, rc: RestClient, path: str) -> str:
         if path in self.folders:
@@ -84,6 +92,13 @@ class CopyDirectory:
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
+        if 'qc208' in self.cluster:
+            total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
+            if free < self.security_space:
+                log_it("Security space has been reached")
+                write_error_in_data(self.data_ticket)
+                exit(0)
+
         for file_obj in file_list:
             try:
                 to_path = file_obj["path"]
