@@ -25,6 +25,7 @@ def log_it(msg: str) -> None:
 
 class CopyDirectory:
     def __init__(self, in_args: Sequence[str]):
+        log_it("Creating copyDir")
         parser = argparse.ArgumentParser(description="")
         parser.add_argument("--to_dir", help="destination directory")
         parser.add_argument(
@@ -54,6 +55,7 @@ class CopyDirectory:
         self.security_space = int(args.security_space)
         self.data_ticket = args.data_ticket
         self.cluster = args.host
+        log_it("Ending copyDir")
 
     def create_folder(self, rc: RestClient, path: str) -> str:
         if path in self.folders:
