@@ -102,6 +102,7 @@ class CopyDirectory:
                 exit(0)
 
         for file_obj in file_list:
+            log_it(f'executing {file_obj["path"]}')
             try:
                 to_path = file_obj["path"]
                 if self.to_dir is not None:
@@ -318,5 +319,6 @@ class CopyDirectory:
 
     @staticmethod
     def work_done(_work_obj: Worker) -> None:
+        log_it("command finished")
         write_finish_data(_work_obj.data_ticket,_work_obj.action_count)
         pass
