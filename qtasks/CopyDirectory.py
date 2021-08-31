@@ -92,7 +92,7 @@ class CopyDirectory:
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
-        # log_it(f'starting batch')
+        log_it(f'starting batch')
         # if work_obj.data_ticket is None:
         #     work_obj.data_ticket = self.data_ticket
         # if 'qc208' in self.cluster:
