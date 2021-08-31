@@ -346,14 +346,14 @@ class QWalkWorker:  # pylint: disable=too-many-instance-attributes
             ww.active_workers.value += 1
         process_list = []
         while True:
-            log_it("while listing")
             if time.time() - client_start > 60 * 60:
                 # re-initialize rest client every hour
                 ww.rc.login(ww.creds["QUSER"], ww.creds["QPASS"])
                 # log_it("re-initialized Qumulo rest client for worker")
             try:
+                log_it(ww.queue.qsize())
                 data = ww.queue.get(True, timeout=5)
-                log_it(data)
+                log_it(ww.queue.qsize())
                 if data["type"] == "list_dir":
                     file_list += func(data, ww)
                     while len(file_list) > 0:
