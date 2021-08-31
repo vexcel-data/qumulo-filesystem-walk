@@ -323,5 +323,5 @@ class CopyDirectory:
     @staticmethod
     def work_done(_work_obj: Worker) -> None:
         global data_ticket
-        write_finish_data(data_ticket,int(_work_obj.action_count))
+        write_finish_data(data_ticket,int(_work_obj.action_count.value))
         pass
