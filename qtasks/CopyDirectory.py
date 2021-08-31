@@ -38,7 +38,7 @@ class CopyDirectory:
         parser.add_argument("--security_space", help="Security space in disk  in bytes", required=False,
                             default=219902325555200)
         parser.add_argument("--data_ticket", help="Data to be copied", required=False)
-        parser.add_argument("-s", help="Qumulo hostname", required=True)
+        parser.add_argument("--host", help="Qumulo hostname", required=True)
         args = parser.parse_args(in_args)
         self.to_dir: Optional[str] = None
         self.skip_hardlinks: Optional[bool] = None
@@ -53,7 +53,7 @@ class CopyDirectory:
         self.folders: Dict[str, str] = {}
         self.security_space = int(args.security_space)
         self.data_ticket = args.data_ticket
-        self.cluster = args.s
+        self.cluster = args.host
 
     def create_folder(self, rc: RestClient, path: str) -> str:
         if path in self.folders:

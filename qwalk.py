@@ -44,8 +44,8 @@ def main() -> None:
     other_args.append("--data_ticket")
     other_args.append(args.data_ticket)
     other_args.append("--security_space")
-    other_args.append(args.security_space)
-    other_args.append("--s")
+    other_args.append(str(args.security_space))
+    other_args.append("--host")
     other_args.append(args.s)
 
     if 'qc208' in args.s:
@@ -60,6 +60,8 @@ def main() -> None:
             log_it("Security space has been reached")
             write_error_in_data(args.data_ticket, 'Security space reached')
             exit(0)
+        else:
+            log_it(f'free space is {free} and security space is {security_space}')
 
 
 
