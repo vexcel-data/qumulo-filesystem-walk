@@ -346,6 +346,7 @@ class QWalkWorker:  # pylint: disable=too-many-instance-attributes
             ww.active_workers.value += 1
         process_list = []
         while True:
+            log_it("while listing")
             if time.time() - client_start > 60 * 60:
                 # re-initialize rest client every hour
                 ww.rc.login(ww.creds["QUSER"], ww.creds["QPASS"])
