@@ -4,7 +4,7 @@ import argparse
 import os
 import sys
 
-# from qwalk_utils import get_disk_usage, write_error_in_data
+from qwalk_utils import get_disk_usage, write_error_in_data
 from qwalk_worker import QTASKS, QWalkWorker, log_it
 
 
@@ -28,8 +28,8 @@ def main() -> None:
         choices=list(QTASKS.keys()),
         required=True,
     )
-    # parser.add_argument("--security_space",help="Security space in disk  in bytes",required=False,default=219902325555200)
-    # parser.add_argument("--data_ticket",help="Data to be copied",required=False)
+    parser.add_argument("--security_space",help="Security space in disk  in bytes",required=False,default=219902325555200)
+    parser.add_argument("--data_ticket",help="Data to be copied",required=False)
     parser.add_argument("--snap", help="Snapshot id")
 
     try:
@@ -40,43 +40,43 @@ def main() -> None:
         parser.print_help()
         print("-" * 80)
         sys.exit(0)
-    # security_space = int(args.security_space)
-    # other_args.append("--data_ticket")
-    # other_args.append(args.data_ticket)
-    # other_args.append("--security_space")
-    # other_args.append(str(args.security_space))
-    # other_args.append("--host")
-    # other_args.append(args.s)
+    security_space = int(args.security_space)
+    other_args.append("--data_ticket")
+    other_args.append(args.data_ticket)
+    other_args.append("--security_space")
+    other_args.append(str(args.security_space))
+    other_args.append("--host")
+    other_args.append(args.s)
 
-    # if 'qc208' in args.s:
-    #     normal_path = args.d
-    #     qc_path = normal_path.replace('Shares','qc208')
-    #     if not os.path.exists(qc_path):
-    #         log_it("Path does not exists")
-    #         write_error_in_data(args.data_ticket, 'Path does not exists')
-    #         exit(0)
-    #     total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
-    #     if free < security_space:
-    #         log_it("Security space has been reached")
-    #         write_error_in_data(args.data_ticket, 'Security space reached')
-    #         exit(0)
-    #     else:
-    #         log_it(f'free space is {free} and security space is {security_space}')
-    #
-    # if 'QHPE180' in args.s:
-    #     normal_path = args.d
-    #     qc_path = normal_path.replace('Shares','qhpe180')
-    #     if not os.path.exists(qc_path):
-    #         log_it("Path does not exists")
-    #         write_error_in_data(args.data_ticket, 'Path does not exists')
-    #         exit(0)
-    #     total, used, free, used_percent = get_disk_usage('/qhpe180/ultramap-production')
-    #     if free < security_space:
-    #         log_it("Security space has been reached")
-    #         write_error_in_data(args.data_ticket, 'Security space reached')
-    #         exit(0)
-    #     else:
-    #         log_it(f'free space is {free} and security space is {security_space}')
+    if 'qc208' in args.s:
+        normal_path = args.d
+        qc_path = normal_path.replace('Shares','qc208')
+        if not os.path.exists(qc_path):
+            log_it("Path does not exists")
+            write_error_in_data(args.data_ticket, 'Path does not exists')
+            exit(0)
+        total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
+        if free < security_space:
+            log_it("Security space has been reached")
+            write_error_in_data(args.data_ticket, 'Security space reached')
+            exit(0)
+        else:
+            log_it(f'free space is {free} and security space is {security_space}')
+
+    if 'QHPE180' in args.s:
+        normal_path = args.d
+        qc_path = normal_path.replace('Shares','qhpe180')
+        if not os.path.exists(qc_path):
+            log_it("Path does not exists")
+            write_error_in_data(args.data_ticket, 'Path does not exists')
+            exit(0)
+        total, used, free, used_percent = get_disk_usage('/qhpe180/ultramap-production')
+        if free < security_space:
+            log_it("Security space has been reached")
+            write_error_in_data(args.data_ticket, 'Security space reached')
+            exit(0)
+        else:
+            log_it(f'free space is {free} and security space is {security_space}')
 
 
 

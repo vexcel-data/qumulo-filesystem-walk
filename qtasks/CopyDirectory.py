@@ -36,10 +36,10 @@ class CopyDirectory:
             help="will not preserve permissions or timestamps",
             action="store_true",
         )
-        # parser.add_argument("--security_space", help="Security space in disk  in bytes", required=False,
-        #                     default=219902325555200)
-        # parser.add_argument("--data_ticket", help="Data to be copied", required=False)
-        # parser.add_argument("--host", help="Qumulo hostname", required=True)
+        parser.add_argument("--security_space", help="Security space in disk  in bytes", required=False,
+                            default=219902325555200)
+        parser.add_argument("--data_ticket", help="Data to be copied", required=False)
+        parser.add_argument("--host", help="Qumulo hostname", required=True)
         args = parser.parse_args(in_args)
         self.to_dir: Optional[str] = None
         self.skip_hardlinks: Optional[bool] = None
