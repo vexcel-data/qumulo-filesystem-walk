@@ -10,10 +10,11 @@ from typing import Dict, Optional, Sequence
 from qumulo.rest_client import RestClient
 
 # from qwalk_utils import get_disk_usage, write_error_in_data, write_finish_data
-from qwalk_utils import get_disk_usage, write_error_in_data
+from qwalk_utils import get_disk_usage, write_error_in_data, write_finish_data
 from . import FileInfo, Worker
 
 DEBUG = False
+data_ticket = None
 if os.getenv("QDEBUG"):
     DEBUG = True
 
@@ -54,6 +55,7 @@ class CopyDirectory:
         self.folders: Dict[str, str] = {}
         self.security_space = int(args.security_space)
         self.data_ticket = args.data_ticket
+        data_ticket = self.data_ticket
         self.cluster = args.host
 
     def create_folder(self, rc: RestClient, path: str) -> str:
@@ -98,7 +100,7 @@ class CopyDirectory:
         if 'qc208' in self.cluster:
             total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
             if free < self.security_space:
-                write_error_in_data('TEST',f'Security space reached free: {free} needed {self.security_space}')
+                write_error_in_data(self.data_ticket,f'Security space reached free: {free} needed {self.security_space}')
                 print("Security space has been reached")
                 exit(0)
 
@@ -319,6 +321,5 @@ class CopyDirectory:
 
     @staticmethod
     def work_done(_work_obj: Worker) -> None:
-        # log_it("command finished")
-        # write_finish_data(_work_obj.data_ticket,_work_obj.action_count)
+        write_finish_data(data_ticket,_work_obj.action_count)
         pass
