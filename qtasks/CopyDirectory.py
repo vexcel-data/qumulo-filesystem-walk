@@ -93,12 +93,12 @@ class CopyDirectory:
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
-        if work_obj.data_ticket is None:
-            work_obj.data_ticket = self.data_ticket
+        # if work_obj.data_ticket is None:
+        #     work_obj.data_ticket = self.data_ticket
         if 'qc208' in self.cluster:
             total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
             if free < self.security_space:
-                write_error_in_data(self.data_ticket,f'Security space reached free: {free} needed {self.security_space}')
+                write_error_in_data('TEST',f'Security space reached free: {free} needed {self.security_space}')
                 print("Security space has been reached")
                 exit(0)
 
