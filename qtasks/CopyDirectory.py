@@ -9,7 +9,7 @@ from typing import Dict, Optional, Sequence
 
 from qumulo.rest_client import RestClient
 
-from qwalk_utils import get_disk_usage, write_error_in_data
+from qwalk_utils import get_disk_usage, write_error_in_data, write_finish_data
 from . import FileInfo, Worker
 
 DEBUG = False
@@ -92,6 +92,8 @@ class CopyDirectory:
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
+        if work_obj.data_ticket is None:
+            work_obj.data_ticket = self.data_ticket
         if 'qc208' in self.cluster:
             total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
             if free < self.security_space:
@@ -316,4 +318,5 @@ class CopyDirectory:
 
     @staticmethod
     def work_done(_work_obj: Worker) -> None:
+        write_finish_data(_work_obj.data_ticket,_work_obj.action_count)
         pass
