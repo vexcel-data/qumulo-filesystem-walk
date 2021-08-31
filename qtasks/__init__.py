@@ -44,7 +44,7 @@ class Worker(Protocol):  # pylint: disable=too-few-public-methods
     action_count: "_Value"
     start_path: str
     snap: Optional[str]
-    data_ticket: str
+    # data_ticket: str
 
 
 class Task(Protocol):  # pylint: disable=super-init-not-called
