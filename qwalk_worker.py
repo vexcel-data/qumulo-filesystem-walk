@@ -353,6 +353,7 @@ class QWalkWorker:  # pylint: disable=too-many-instance-attributes
                 # log_it("re-initialized Qumulo rest client for worker")
             try:
                 data = ww.queue.get(True, timeout=5)
+                log_it(data)
                 if data["type"] == "list_dir":
                     file_list += func(data, ww)
                     while len(file_list) > 0:
