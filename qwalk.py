@@ -63,7 +63,20 @@ def main() -> None:
         else:
             log_it(f'free space is {free} and security space is {security_space}')
 
-
+    if 'QHPE180' in args.s:
+        normal_path = args.d
+        qc_path = normal_path.replace('Shares','qhpe180')
+        if not os.path.exists(qc_path):
+            log_it("Path does not exists")
+            write_error_in_data(args.data_ticket, 'Path does not exists')
+            exit(0)
+        total, used, free, used_percent = get_disk_usage('/qhpe180/ultramap-production')
+        if free < security_space:
+            log_it("Security space has been reached")
+            write_error_in_data(args.data_ticket, 'Security space reached')
+            exit(0)
+        else:
+            log_it(f'free space is {free} and security space is {security_space}')
 
 
 
