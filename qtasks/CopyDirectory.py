@@ -27,6 +27,7 @@ def log_it(msg: str) -> None:
 
 class CopyDirectory:
     def __init__(self, in_args: Sequence[str]):
+        global data_ticket
         parser = argparse.ArgumentParser(description="")
         parser.add_argument("--to_dir", help="destination directory")
         parser.add_argument(
@@ -321,5 +322,6 @@ class CopyDirectory:
 
     @staticmethod
     def work_done(_work_obj: Worker) -> None:
-        write_finish_data(data_ticket,_work_obj.action_count)
+        global data_ticket
+        write_finish_data(data_ticket,int(_work_obj.action_count))
         pass
