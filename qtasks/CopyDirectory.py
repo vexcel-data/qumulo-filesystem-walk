@@ -10,6 +10,7 @@ from typing import Dict, Optional, Sequence
 from qumulo.rest_client import RestClient
 
 # from qwalk_utils import get_disk_usage, write_error_in_data, write_finish_data
+from qwalk_utils import get_disk_usage, write_error_in_data
 from . import FileInfo, Worker
 
 DEBUG = False
@@ -92,18 +93,16 @@ class CopyDirectory:
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
-        log_it(f'starting batch')
-        # if work_obj.data_ticket is None:
-        #     work_obj.data_ticket = self.data_ticket
-        # if 'qc208' in self.cluster:
-        #     total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
-        #     if free < self.security_space:
-        #         log_it("Security space has been reached")
-        #         write_error_in_data(self.data_ticket)
-        #         exit(0)
+        if work_obj.data_ticket is None:
+            work_obj.data_ticket = self.data_ticket
+        if 'qc208' in self.cluster:
+            total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
+            if free < self.security_space:
+                write_error_in_data(self.data_ticket,f'Security space reached free: {free} needed {self.security_space}')
+                print("Security space has been reached")
+                exit(0)
 
         for file_obj in file_list:
-            log_it(f'executing {file_obj["path"]}')
             try:
                 to_path = file_obj["path"]
                 if self.to_dir is not None:
