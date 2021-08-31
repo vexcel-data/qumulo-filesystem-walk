@@ -10,7 +10,6 @@ from typing import Dict, Optional, Sequence
 from qumulo.rest_client import RestClient
 
 # from qwalk_utils import get_disk_usage, write_error_in_data, write_finish_data
-from qwalk_utils import get_disk_usage, write_error_in_data
 from . import FileInfo, Worker
 
 DEBUG = False
@@ -26,7 +25,6 @@ def log_it(msg: str) -> None:
 
 class CopyDirectory:
     def __init__(self, in_args: Sequence[str]):
-        print("starting copy")
         parser = argparse.ArgumentParser(description="")
         parser.add_argument("--to_dir", help="destination directory")
         parser.add_argument(
@@ -56,7 +54,6 @@ class CopyDirectory:
         self.security_space = int(args.security_space)
         self.data_ticket = args.data_ticket
         self.cluster = args.host
-        print("ending initialization copy")
 
     def create_folder(self, rc: RestClient, path: str) -> str:
         if path in self.folders:
@@ -95,14 +92,15 @@ class CopyDirectory:
 
     def every_batch(self, file_list: Sequence[FileInfo], work_obj: Worker) -> None:
         results = []
-        if work_obj.data_ticket is None:
-            work_obj.data_ticket = self.data_ticket
-        if 'qc208' in self.cluster:
-            total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
-            if free < self.security_space:
-                log_it("Security space has been reached")
-                write_error_in_data(self.data_ticket)
-                exit(0)
+        # log_it(f'starting batch')
+        # if work_obj.data_ticket is None:
+        #     work_obj.data_ticket = self.data_ticket
+        # if 'qc208' in self.cluster:
+        #     total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
+        #     if free < self.security_space:
+        #         log_it("Security space has been reached")
+        #         write_error_in_data(self.data_ticket)
+        #         exit(0)
 
         for file_obj in file_list:
             log_it(f'executing {file_obj["path"]}')
