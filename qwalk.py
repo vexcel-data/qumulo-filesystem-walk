@@ -47,10 +47,13 @@ def main() -> None:
     other_args.append(security_space)
     other_args.append("--s")
     other_args.append(args.s)
-    if not os.path.exists(args.d):
-        log_it("Path does not sxists")
-        write_error_in_data(args.data_ticket, 'Path does not exists')
+
     if 'qc208' in args.s:
+        normal_path = args.d
+        qc_path = normal_path.replace('Shares','qc208')
+        if not os.path.exists(qc_path):
+            log_it("Path does not exists")
+            write_error_in_data(args.data_ticket, 'Path does not exists')
         total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
         if free < security_space:
             log_it("Security space has been reached")
