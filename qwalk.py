@@ -39,7 +39,7 @@ def main() -> None:
         print("-" * 80)
         parser.print_help()
         print("-" * 80)
-        sys.exit(0)
+        sys.exit(-2)
     security_space = int(args.security_space)
     other_args.append("--data_ticket")
     other_args.append(args.data_ticket)
@@ -54,12 +54,10 @@ def main() -> None:
         if not os.path.exists(qc_path):
             log_it("Path does not exists")
             write_error_in_data(args.data_ticket, 'Path does not exists')
-            exit(0)
+            exit(-1)
         total, used, free, used_percent = get_disk_usage('/qc208/ultramap-production')
         if free < security_space:
             log_it("Security space has been reached")
-            write_error_in_data(args.data_ticket, 'Security space reached')
-            exit(0)
         else:
             log_it(f'free space is {free} and security space is {security_space}')
 
@@ -69,12 +67,10 @@ def main() -> None:
         if not os.path.exists(qc_path):
             log_it("Path does not exists")
             write_error_in_data(args.data_ticket, 'Path does not exists')
-            exit(0)
+            exit(-1)
         total, used, free, used_percent = get_disk_usage('/qhpe180/ultramap-production')
         if free < security_space:
             log_it("Security space has been reached")
-            write_error_in_data(args.data_ticket, 'Security space reached')
-            exit(0)
         else:
             log_it(f'free space is {free} and security space is {security_space}')
 
